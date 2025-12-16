@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA & RNA Visualization | Molecular Biology Explorer</title>
+    <meta name="description"
+        content="Interactive visualization of DNA and RNA structures, replication, transcription, translation, and gene regulation. Explore molecular biology concepts through animated visualizations.">
+
+    <!-- SEO & Social Sharing -->
+    <meta name="keywords"
+        content="DNA, RNA, molecular biology, visualization, replication, transcription, translation, gene regulation, biology education, interactive learning">
+    <meta name="author" content="Abhra">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DNA & RNA Visualization | Molecular Biology Explorer">
+    <meta property="og:description"
+        content="Interactive visualization of DNA and RNA structures, replication, transcription, translation, and gene regulation.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Hayagriva0/dna-rna-viz/main/preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DNA & RNA Visualization | Molecular Biology Explorer">
+    <meta name="twitter:description"
+        content="Interactive visualization of DNA and RNA structures, replication, transcription, translation, and gene regulation.">
+
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a24;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b0;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+
+            /* Base pair colors */
+            --adenine: #ff6b6b;
+            --thymine: #4ecdc4;
+            --guanine: #ffe66d;
+            --cytosine: #95e1d3;
+            --uracil: #f38181;
+
+            /* Backbone */
+            --backbone: #667eea;
+            --backbone-dark: #4c51bf;
+
+            /* Animation */
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.4s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background gradient animation */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                var(--bg-primary);
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--adenine));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1.5rem 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .tab-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-secondary);
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Visualization Container */
+        .viz-container {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        /* ========== DNA HELIX VISUALIZATION ========== */
+        .dna-helix {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            perspective: 1000px;
+        }
+
+        .helix-container {
+            transform-style: preserve-3d;
+            animation: rotateHelix 15s linear infinite;
+        }
+
+        .helix-container.paused {
+            animation-play-state: paused;
+        }
+
+        @keyframes rotateHelix {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
+        .base-pair {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            transform-style: preserve-3d;
+        }
+
+        .nucleotide {
+            width: 50px;
+            height: 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .nucleotide:hover {
+            transform: scale(1.1);
+        }
+
+        .bond {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            position: relative;
+        }
+
+        .bond::before,
+        .bond::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .bond::before {
+            left: 15px;
+        }
+
+        .bond::after {
+            right: 15px;
+        }
+
+        .backbone-strand {
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--backbone), var(--backbone-dark));
+            border-radius: 4px;
+        }
+
+        /* ========== RNA STRUCTURE ========== */
+        .rna-container {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            padding: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .strand-column {
+            text-align: center;
+        }
+
+        .strand-column h3 {
+            margin-bottom: 1.5rem;
+            color: var(--accent-secondary);
+            font-size: 1.2rem;
+        }
+
+        .strand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .strand .nucleotide {
+            width: 80px;
+            animation: floatNucleotide 3s ease-in-out infinite;
+        }
+
+        .strand .nucleotide:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes floatNucleotide {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+        }
+
+        .comparison-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 2rem;
+        }
+
+        /* ========== REPLICATION ANIMATION ========== */
+        .replication-container {
+            position: relative;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .replication-fork {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .parent-strand,
+        .daughter-strand {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .mini-nucleotide {
+            width: 40px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.8);
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .mini-nucleotide.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .enzyme {
+            position: absolute;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
+            transition: all 0.5s ease;
+            z-index: 10;
+        }
+
+        .enzyme.helicase {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .enzyme.polymerase {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .step-indicator {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .step-indicator h4 {
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-indicator p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ========== TRANSCRIPTION ANIMATION ========== */
+        .transcription-container {
+            position: relative;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dna-template {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .mrna-strand {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .transcription-bubble {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            padding: 2rem;
+        }
+
+        .rna-polymerase {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5);
+            transition: left 0.8s ease;
+            z-index: 10;
+        }
+
+        .direction-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .direction-arrow span {
+            font-size: 1.5rem;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            max-width: 400px;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tabs {
+                gap: 0.25rem;
+            }
+
+            .tab-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .viz-container {
+                padding: 1rem;
+            }
+
+            .rna-container {
+                gap: 2rem;
+            }
+        }
+
+        /* ========== RNA PROCESSING (Unit 4) ========== */
+        .pre-mrna-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .gene-structure {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .exon {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .intron {
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            border-radius: 4px;
+            color: white;
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .intron.removed {
+            opacity: 0.3;
+            text-decoration: line-through;
+            transform: scale(0.9);
+        }
+
+        .cap-tail {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .five-cap {
+            padding: 0.5rem 0.75rem;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 8px 0 0 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .poly-a-tail {
+            padding: 0.5rem 0.75rem;
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            border-radius: 0 8px 8px 0;
+            color: white;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .splicing-animation {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .sirna-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .sirna-strand {
+            display: flex;
+            gap: 2px;
+        }
+
+        .sirna-base {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* ========== TRANSLATION (Unit 5) ========== */
+        .ribosome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .ribosome {
+            position: relative;
+            width: 300px;
+            height: 180px;
+        }
+
+        .ribosome-large {
+            position: absolute;
+            width: 280px;
+            height: 100px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            border-radius: 50px 50px 20px 20px;
+            top: 0;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .ribosome-small {
+            position: absolute;
+            width: 220px;
+            height: 70px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border-radius: 20px 20px 40px 40px;
+            bottom: 0;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .site-labels {
+            position: absolute;
+            top: 105px;
+            left: 50px;
+            display: flex;
+            gap: 30px;
+        }
+
+        .site {
+            width: 50px;
+            height: 30px;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .trna {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trna-arm {
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(180deg, #f59e0b, #d97706);
+            border-radius: 20px 20px 5px 5px;
+            position: relative;
+        }
+
+        .trna-anticodon {
+            display: flex;
+            gap: 2px;
+            padding: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        .amino-acid {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .polypeptide-chain {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .inhibitors-table {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 1rem;
+            border-collapse: collapse;
+        }
+
+        .inhibitors-table th,
+        .inhibitors-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .inhibitors-table th {
+            background: var(--bg-tertiary);
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .inhibitors-table td {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* ========== GENE REGULATION (Unit 6) ========== */
+        .operon-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .operon {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .operon-element {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .promoter {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .operator {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .structural-gene {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .repressor {
+            position: absolute;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            border-radius: 20px;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.5s ease;
+        }
+
+        .chromatin-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nucleosome {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .histone {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .histone.acetylated {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .dna-wrap {
+            width: 80px;
+            height: 20px;
+            border: 3px solid var(--backbone);
+            border-radius: 10px;
+            border-bottom: none;
+        }
+
+        .methylation-site {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.25rem 0.5rem;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .methyl-group {
+            width: 16px;
+            height: 16px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .state-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .state-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .state-btn.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .sub-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .sub-tab {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sub-tab:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .sub-tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .sub-section {
+            display: none;
+        }
+
+        .sub-section.active {
+            display: block;
+        }
+
+        /* Welcome Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .modal-content .creator {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-content .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #333, #24292e);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .modal-content .github-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close-btn {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Welcome Modal -->
+    <div class="modal-overlay" id="welcomeModal">
+        <div class="modal-content">
+            <h2>🧬 Welcome!</h2>
+            <p>Explore DNA, RNA, Replication, Transcription, Translation, and Gene Regulation through interactive
+                visualizations.</p>
+            <p class="creator">Made with ❤️ by <strong>Abhra</strong></p>
+            <a href="https://github.com/Hayagriva0" target="_blank" class="github-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                Open Source on GitHub
+            </a>
+            <br>
+            <button class="modal-close-btn"
+                onclick="document.getElementById('welcomeModal').classList.add('hidden')">Let's Explore! 🚀</button>
+        </div>
+    </div>
+
+    <div class="bg-gradient"></div>
+
+    <header>
+        <h1>🧬 DNA & RNA Visualization</h1>
+        <p>Explore the molecular structures and processes of life</p>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" data-tab="dna-structure">DNA Structure</button>
+        <button class="tab-btn" data-tab="rna-structure">RNA Structure</button>
+        <button class="tab-btn" data-tab="replication">DNA Replication</button>
+        <button class="tab-btn" data-tab="transcription">Transcription</button>
+        <button class="tab-btn" data-tab="rna-processing">RNA Processing</button>
+        <button class="tab-btn" data-tab="translation">Translation</button>
+        <button class="tab-btn" data-tab="gene-regulation">Gene Regulation</button>
+    </nav>
+
+    <main>
+        <!-- DNA STRUCTURE SECTION -->
+        <section id="dna-structure" class="section active">
+            <div class="info-card">
+                <h2>DNA Double Helix</h2>
+                <p>DNA (Deoxyribonucleic Acid) consists of two complementary strands wound around each other in a double
+                    helix. The strands are connected by hydrogen bonds between complementary base pairs: <strong>Adenine
+                        (A)</strong> pairs with <strong>Thymine (T)</strong>, and <strong>Guanine (G)</strong> pairs
+                    with <strong>Cytosine (C)</strong>.</p>
+            </div>
+
+            <div class="viz-container">
+                <div class="dna-helix">
+                    <div class="helix-container" id="dnaHelix"></div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" id="toggleRotation">
+                    <span>⏸️</span> Pause Rotation
+                </button>
+                <button class="control-btn" id="speedUp">
+                    <span>⚡</span> Speed Up
+                </button>
+                <button class="control-btn" id="slowDown">
+                    <span>🐢</span> Slow Down
+                </button>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--adenine);"></div>
+                    <span>Adenine (A)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--thymine);"></div>
+                    <span>Thymine (T)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--guanine);"></div>
+                    <span>Guanine (G)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--cytosine);"></div>
+                    <span>Cytosine (C)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RNA STRUCTURE SECTION -->
+        <section id="rna-structure" class="section">
+            <div class="info-card">
+                <h2>RNA vs DNA Structure</h2>
+                <p>RNA (Ribonucleic Acid) is typically single-stranded and uses <strong>Uracil (U)</strong> instead of
+                    Thymine. The sugar in RNA is ribose (with an extra -OH group), while DNA contains deoxyribose. RNA
+                    plays crucial roles in protein synthesis as mRNA, tRNA, and rRNA.</p>
+            </div>
+
+            <div class="viz-container">
+                <div class="rna-container">
+                    <div class="strand-column">
+                        <h3>🔵 DNA Strand</h3>
+                        <div class="strand" id="dnaStrand"></div>
+                        <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.85rem;">Contains: A, T,
+                            G, C<br>Sugar: Deoxyribose</p>
+                    </div>
+
+                    <div class="comparison-arrow">→</div>
+
+                    <div class="strand-column">
+                        <h3>🟠 RNA Strand</h3>
+                        <div class="strand" id="rnaStrand"></div>
+                        <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.85rem;">Contains: A, U,
+                            G, C<br>Sugar: Ribose</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--adenine);"></div>
+                    <span>Adenine (A)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--thymine);"></div>
+                    <span>Thymine (T) - DNA only</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--uracil);"></div>
+                    <span>Uracil (U) - RNA only</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--guanine);"></div>
+                    <span>Guanine (G)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--cytosine);"></div>
+                    <span>Cytosine (C)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- REPLICATION SECTION -->
+        <section id="replication" class="section">
+            <div class="info-card">
+                <h2>DNA Replication</h2>
+                <p>DNA replication is the process by which DNA makes a copy of itself. <strong>Helicase</strong> unwinds
+                    the double helix, and <strong>DNA Polymerase</strong> adds complementary nucleotides to each
+                    template strand, creating two identical DNA molecules.</p>
+            </div>
+
+            <div class="viz-container">
+                <div class="replication-container">
+                    <div class="replication-fork" id="replicationFork">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <span style="color: var(--accent-secondary);">5' ←――――――――――――――→ 3'</span>
+                        </div>
+                        <div class="parent-strand" id="templateStrand1"></div>
+                        <div class="daughter-strand" id="newStrand1"></div>
+                        <div style="height: 20px;"></div>
+                        <div class="daughter-strand" id="newStrand2"></div>
+                        <div class="parent-strand" id="templateStrand2"></div>
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <span style="color: var(--accent-secondary);">3' ←――――――――――――――→ 5'</span>
+                        </div>
+                    </div>
+
+                    <div class="step-indicator" id="replicationStep">
+                        <h4>Step 1: Initialization</h4>
+                        <p>Press Play to start DNA replication</p>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="replicationProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" id="playReplication">
+                    <span>▶️</span> Play
+                </button>
+                <button class="control-btn" id="pauseReplication">
+                    <span>⏸️</span> Pause
+                </button>
+                <button class="control-btn" id="resetReplication">
+                    <span>🔄</span> Reset
+                </button>
+                <button class="control-btn" id="stepReplication">
+                    <span>⏭️</span> Step
+                </button>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"></div>
+                    <span>Helicase</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+                    <span>DNA Polymerase</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--adenine);"></div>
+                    <span>A-T pair</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--guanine);"></div>
+                    <span>G-C pair</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRANSCRIPTION SECTION -->
+        <section id="transcription" class="section">
+            <div class="info-card">
+                <h2>Transcription: DNA to RNA</h2>
+                <p>Transcription is the process of copying a gene's DNA sequence into RNA. <strong>RNA
+                        Polymerase</strong> reads the template strand (3' to 5') and synthesizes mRNA in the 5' to 3'
+                    direction. In RNA, Uracil (U) pairs with Adenine instead of Thymine.</p>
+            </div>
+
+            <div class="viz-container">
+                <div class="transcription-container">
+                    <div class="transcription-bubble" id="transcriptionBubble">
+                        <div style="text-align: center; margin-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary); font-size: 0.85rem;">Template DNA Strand (3' →
+                                5')</span>
+                        </div>
+                        <div class="dna-template" id="dnaTemplate"></div>
+
+                        <div class="direction-arrow">
+                            <span>↓</span> RNA Polymerase reads & synthesizes <span>↓</span>
+                        </div>
+
+                        <div class="mrna-strand" id="mrnaStrand"></div>
+                        <div style="text-align: center; margin-top: 0.5rem;">
+                            <span style="color: var(--text-secondary); font-size: 0.85rem;">mRNA Strand (5' → 3')</span>
+                        </div>
+                    </div>
+
+                    <div class="step-indicator" id="transcriptionStep">
+                        <h4>Transcription Process</h4>
+                        <p>Press Play to start transcription</p>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="transcriptionProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" id="playTranscription">
+                    <span>▶️</span> Play
+                </button>
+                <button class="control-btn" id="pauseTranscription">
+                    <span>⏸️</span> Pause
+                </button>
+                <button class="control-btn" id="resetTranscription">
+                    <span>🔄</span> Reset
+                </button>
+                <button class="control-btn" id="stepTranscription">
+                    <span>⏭️</span> Step
+                </button>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                    <span>RNA Polymerase</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--adenine);"></div>
+                    <span>Adenine (A)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--uracil);"></div>
+                    <span>Uracil (U)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--guanine);"></div>
+                    <span>Guanine (G)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--cytosine);"></div>
+                    <span>Cytosine (C)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RNA PROCESSING SECTION (Unit 4) -->
+        <section id="rna-processing" class="section">
+            <div class="info-card">
+                <h2>Post-Transcriptional Processing</h2>
+                <p>Pre-mRNA undergoes several modifications before becoming mature mRNA: <strong>5' capping</strong>
+                    (7-methylguanosine), <strong>3' polyadenylation</strong> (poly-A tail), and <strong>RNA
+                        splicing</strong> to remove introns. The <strong>spliceosome</strong> (snRNPs) catalyzes
+                    splicing. <strong>Alternative splicing</strong> allows one gene to produce multiple proteins.</p>
+            </div>
+
+            <div class="viz-container">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-subtab="splicing">Splicing</button>
+                    <button class="sub-tab" data-subtab="capping">Capping & Poly-A</button>
+                    <button class="sub-tab" data-subtab="sirna">RNA Interference</button>
+                </div>
+
+                <div id="splicing" class="sub-section active">
+                    <div class="pre-mrna-container">
+                        <div style="text-align: center;">
+                            <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">Pre-mRNA (Split Gene)</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Exons
+                                (coding) are kept, Introns (non-coding) are removed</p>
+                        </div>
+                        <div class="gene-structure" id="preMrna">
+                            <div class="exon">Exon 1</div>
+                            <div class="intron" id="intron1">Intron 1</div>
+                            <div class="exon">Exon 2</div>
+                            <div class="intron" id="intron2">Intron 2</div>
+                            <div class="exon">Exon 3</div>
+                            <div class="intron" id="intron3">Intron 3</div>
+                            <div class="exon">Exon 4</div>
+                        </div>
+
+                        <div style="text-align: center; margin: 1rem 0;">
+                            <span style="font-size: 2rem;">⬇️</span>
+                            <p style="color: var(--accent-primary); font-size: 0.9rem;">Spliceosome removes introns</p>
+                        </div>
+
+                        <div class="gene-structure" id="matureMrna">
+                            <div class="exon">Exon 1</div>
+                            <div class="exon">Exon 2</div>
+                            <div class="exon">Exon 3</div>
+                            <div class="exon">Exon 4</div>
+                        </div>
+
+                        <div class="step-indicator" id="splicingStep">
+                            <h4>Alternative Splicing</h4>
+                            <p>Different exon combinations create different proteins from the same gene</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="capping" class="sub-section">
+                    <div class="pre-mrna-container">
+                        <h3 style="color: var(--accent-secondary); margin-bottom: 1.5rem;">5' Capping & 3'
+                            Polyadenylation</h3>
+
+                        <div class="cap-tail">
+                            <div class="five-cap">5' Cap<br>(m7G)</div>
+                            <div class="exon">Exon 1</div>
+                            <div class="exon">Exon 2</div>
+                            <div class="exon">Exon 3</div>
+                            <div class="poly-a-tail">AAAAAAA<br>Poly-A Tail</div>
+                        </div>
+
+                        <div class="step-indicator" style="margin-top: 2rem;">
+                            <h4>Functions</h4>
+                            <p><strong>5' Cap:</strong> Protects from degradation, aids ribosome binding<br>
+                                <strong>Poly-A Tail:</strong> Stability, export from nucleus, translation initiation
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sirna" class="sub-section">
+                    <div class="pre-mrna-container">
+                        <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">RNA Interference (RNAi)</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">siRNA (small
+                            interfering RNA) silences gene expression by degrading mRNA</p>
+
+                        <div class="sirna-container">
+                            <div style="text-align: center;">
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">Double-stranded siRNA
+                                    (~21 nucleotides)</span>
+                            </div>
+                            <div class="sirna-strand" id="sirnaStrand1"></div>
+                            <div class="sirna-strand" id="sirnaStrand2"></div>
+                        </div>
+
+                        <div style="text-align: center; margin: 1rem 0;">
+                            <span style="font-size: 1.5rem;">⬇️</span>
+                            <p style="color: var(--accent-primary); font-size: 0.85rem;">RISC complex loads siRNA</p>
+                        </div>
+
+                        <div class="step-indicator">
+                            <h4>RNA Interference Mechanism</h4>
+                            <p>1. Dicer cleaves dsRNA → siRNA<br>
+                                2. RISC loads guide strand<br>
+                                3. Target mRNA is cleaved & degraded</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" id="playSplicing">
+                    <span>▶️</span> Animate Splicing
+                </button>
+                <button class="control-btn" id="resetSplicing">
+                    <span>🔄</span> Reset
+                </button>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+                    <span>Exons (Coding)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #6b7280, #4b5563);"></div>
+                    <span>Introns (Non-coding)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                    <span>5' Cap</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #ec4899, #db2777);"></div>
+                    <span>Poly-A Tail</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRANSLATION SECTION (Unit 5) -->
+        <section id="translation" class="section">
+            <div class="info-card">
+                <h2>Translation: mRNA to Protein</h2>
+                <p>Translation occurs at <strong>ribosomes</strong>. <strong>tRNA</strong> molecules carry amino acids
+                    and have anticodons that pair with mRNA codons. <strong>Aminoacyl-tRNA synthetases</strong> charge
+                    tRNAs. The process involves <strong>initiation</strong> (start codon AUG),
+                    <strong>elongation</strong> (peptide bonds), and <strong>termination</strong> (stop codons).
+                </p>
+            </div>
+
+            <div class="viz-container">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-subtab="ribosome-view">Ribosome</button>
+                    <button class="sub-tab" data-subtab="process-view">Translation Steps</button>
+                    <button class="sub-tab" data-subtab="inhibitors-view">Inhibitors</button>
+                </div>
+
+                <div id="ribosome-view" class="sub-section active">
+                    <div class="ribosome-container">
+                        <div class="ribosome">
+                            <div class="ribosome-large">Large Subunit (50S/60S)</div>
+                            <div class="ribosome-small">Small Subunit (30S/40S)</div>
+                            <div class="site-labels">
+                                <div class="site">E</div>
+                                <div class="site">P</div>
+                                <div class="site">A</div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 3rem;">
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">
+                                <strong>E site:</strong> Exit (tRNA leaves) |
+                                <strong>P site:</strong> Peptidyl (holds growing chain) |
+                                <strong>A site:</strong> Aminoacyl (new tRNA enters)
+                            </p>
+                        </div>
+
+                        <div
+                            style="display: flex; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center;">
+                            <div class="trna">
+                                <div class="amino-acid">Met</div>
+                                <div class="trna-arm"></div>
+                                <div class="trna-anticodon">
+                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">UAC</span>
+                                </div>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);">tRNA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="process-view" class="sub-section">
+                    <div class="ribosome-container">
+                        <div id="mrnaCodon" style="display: flex; gap: 4px; margin-bottom: 1rem;"></div>
+
+                        <div class="step-indicator" id="translationStep">
+                            <h4>Initiation</h4>
+                            <p>Small subunit binds to mRNA at AUG start codon. Initiator tRNA (Met) enters P site.</p>
+                        </div>
+
+                        <div style="margin-top: 1.5rem;">
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Growing Polypeptide Chain:</p>
+                            <div class="polypeptide-chain" id="polypeptideChain"></div>
+                        </div>
+
+                        <div class="progress-bar" style="margin-top: 1rem;">
+                            <div class="progress-fill" id="translationProgress" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="inhibitors-view" class="sub-section">
+                    <div style="text-align: center;">
+                        <h3 style="color: var(--accent-secondary); margin-bottom: 1.5rem;">Protein Synthesis Inhibitors
+                        </h3>
+                        <table class="inhibitors-table">
+                            <thead>
+                                <tr>
+                                    <th>Inhibitor</th>
+                                    <th>Target</th>
+                                    <th>Prokaryote/Eukaryote</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Streptomycin</td>
+                                    <td>30S subunit</td>
+                                    <td>Prokaryote</td>
+                                </tr>
+                                <tr>
+                                    <td>Tetracycline</td>
+                                    <td>30S - blocks A site</td>
+                                    <td>Prokaryote</td>
+                                </tr>
+                                <tr>
+                                    <td>Chloramphenicol</td>
+                                    <td>50S - peptidyl transferase</td>
+                                    <td>Prokaryote</td>
+                                </tr>
+                                <tr>
+                                    <td>Erythromycin</td>
+                                    <td>50S - blocks exit tunnel</td>
+                                    <td>Prokaryote</td>
+                                </tr>
+                                <tr>
+                                    <td>Cycloheximide</td>
+                                    <td>60S - blocks translocation</td>
+                                    <td>Eukaryote</td>
+                                </tr>
+                                <tr>
+                                    <td>Puromycin</td>
+                                    <td>A site - causes premature release</td>
+                                    <td>Both</td>
+                                </tr>
+                                <tr>
+                                    <td>Diphtheria toxin</td>
+                                    <td>EF-2 (elongation factor)</td>
+                                    <td>Eukaryote</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" id="playTranslation">
+                    <span>▶️</span> Play
+                </button>
+                <button class="control-btn" id="pauseTranslationBtn">
+                    <span>⏸️</span> Pause
+                </button>
+                <button class="control-btn" id="resetTranslation">
+                    <span>🔄</span> Reset
+                </button>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #6366f1, #4f46e5);"></div>
+                    <span>Large Subunit</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></div>
+                    <span>Small Subunit</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                    <span>tRNA</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #ef4444, #dc2626);"></div>
+                    <span>Amino Acid</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- GENE REGULATION SECTION (Unit 6) -->
+        <section id="gene-regulation" class="section">
+            <div class="info-card">
+                <h2>Gene Regulation</h2>
+                <p>Gene expression is controlled at multiple levels. <strong>Operons</strong> (lac, trp) regulate
+                    prokaryotic genes. <strong>Epigenetic</strong> modifications like <strong>DNA methylation</strong>
+                    (silences genes) and <strong>histone acetylation</strong> (activates genes) control eukaryotic gene
+                    expression by altering chromatin structure.</p>
+            </div>
+
+            <div class="viz-container">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-subtab="lac-operon">Lac Operon</button>
+                    <button class="sub-tab" data-subtab="trp-operon">Trp Operon</button>
+                    <button class="sub-tab" data-subtab="epigenetics">Epigenetics</button>
+                </div>
+
+                <div id="lac-operon" class="sub-section active">
+                    <div class="operon-container">
+                        <div class="state-toggle">
+                            <button class="state-btn active" id="lacNoLactose">No Lactose (OFF)</button>
+                            <button class="state-btn" id="lacWithLactose">Lactose Present (ON)</button>
+                        </div>
+
+                        <div style="position: relative;">
+                            <div class="operon" id="lacOperonViz">
+                                <div class="operon-element promoter">Promoter</div>
+                                <div class="operon-element operator" id="lacOperator">Operator</div>
+                                <div class="operon-element structural-gene">lacZ</div>
+                                <div class="operon-element structural-gene">lacY</div>
+                                <div class="operon-element structural-gene">lacA</div>
+                            </div>
+                            <div class="repressor" id="lacRepressor" style="top: -30px; left: 100px;">Repressor ⛔</div>
+                        </div>
+
+                        <div class="step-indicator" id="lacStep">
+                            <h4>Lac Operon - Inducible System</h4>
+                            <p>Without lactose: Repressor binds operator, blocking transcription.<br>
+                                With lactose: Allolactose (inducer) releases repressor, genes transcribed.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="trp-operon" class="sub-section">
+                    <div class="operon-container">
+                        <div class="state-toggle">
+                            <button class="state-btn" id="trpLow">Low Trp (ON)</button>
+                            <button class="state-btn active" id="trpHigh">High Trp (OFF)</button>
+                        </div>
+
+                        <div style="position: relative;">
+                            <div class="operon" id="trpOperonViz">
+                                <div class="operon-element promoter">Promoter</div>
+                                <div class="operon-element operator" id="trpOperator">Operator</div>
+                                <div class="operon-element structural-gene">trpE</div>
+                                <div class="operon-element structural-gene">trpD</div>
+                                <div class="operon-element structural-gene">trpC</div>
+                                <div class="operon-element structural-gene">trpB</div>
+                                <div class="operon-element structural-gene">trpA</div>
+                            </div>
+                            <div class="repressor" id="trpRepressor" style="top: -30px; left: 100px;">Repressor + Trp ⛔
+                            </div>
+                        </div>
+
+                        <div class="step-indicator" id="trpStep">
+                            <h4>Trp Operon - Repressible System</h4>
+                            <p>High tryptophan: Trp acts as corepressor, activates repressor.<br>
+                                Low tryptophan: Repressor inactive, genes transcribed to make Trp.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="epigenetics" class="sub-section">
+                    <div class="chromatin-container">
+                        <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">Chromatin Modifications</h3>
+
+                        <div style="display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center;">
+                            <div style="text-align: center;">
+                                <h4 style="color: var(--text-secondary); margin-bottom: 1rem;">DNA Methylation</h4>
+                                <div class="nucleosome">
+                                    <div class="methylation-site">
+                                        <span class="methyl-group">CH₃</span>
+                                        <span>CpG</span>
+                                    </div>
+                                    <span style="color: var(--text-secondary);">―</span>
+                                    <div class="methylation-site">
+                                        <span class="methyl-group">CH₃</span>
+                                        <span>CpG</span>
+                                    </div>
+                                </div>
+                                <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.5rem;">Gene
+                                    Silencing</p>
+                            </div>
+
+                            <div style="text-align: center;">
+                                <h4 style="color: var(--text-secondary); margin-bottom: 1rem;">Histone Acetylation</h4>
+                                <div class="nucleosome">
+                                    <div class="dna-wrap"></div>
+                                    <div class="histone acetylated">H3<br>Ac</div>
+                                    <div class="dna-wrap"></div>
+                                </div>
+                                <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.5rem;">Gene
+                                    Activation (Open Chromatin)</p>
+                            </div>
+                        </div>
+
+                        <div class="step-indicator" style="margin-top: 2rem;">
+                            <h4>Epigenetic Regulation</h4>
+                            <p><strong>Methylation:</strong> Adds CH₃ to cytosine → condenses chromatin → silences
+                                genes<br>
+                                <strong>Acetylation:</strong> Adds acetyl to histones → opens chromatin → activates
+                                genes
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                    <span>Promoter</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #ef4444, #dc2626);"></div>
+                    <span>Operator</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+                    <span>Structural Genes</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #6366f1, #4f46e5);"></div>
+                    <span>Repressor</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ========== UTILITIES ==========
+        const baseColors = {
+            'A': 'var(--adenine)',
+            'T': 'var(--thymine)',
+            'G': 'var(--guanine)',
+            'C': 'var(--cytosine)',
+            'U': 'var(--uracil)'
+        };
+
+        const basePairs = {
+            'A': 'T',
+            'T': 'A',
+            'G': 'C',
+            'C': 'G'
+        };
+
+        const rnaComplement = {
+            'A': 'U',
+            'T': 'A',
+            'G': 'C',
+            'C': 'G'
+        };
+
+        function createNucleotide(base, size = 'normal') {
+            const div = document.createElement('div');
+            div.className = size === 'mini' ? 'mini-nucleotide' : 'nucleotide';
+            div.style.background = baseColors[base];
+            div.textContent = base;
+            div.setAttribute('data-tooltip', getBaseName(base));
+            div.classList.add('tooltip');
+            return div;
+        }
+
+        function getBaseName(base) {
+            const names = {
+                'A': 'Adenine',
+                'T': 'Thymine',
+                'G': 'Guanine',
+                'C': 'Cytosine',
+                'U': 'Uracil'
+            };
+            return names[base] || base;
+        }
+
+        // ========== TAB NAVIGATION ==========
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const sections = document.querySelectorAll('.section');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ========== DNA HELIX ==========
+        function initDNAHelix() {
+            const container = document.getElementById('dnaHelix');
+            const sequence = ['A', 'T', 'G', 'C', 'A', 'G', 'T', 'C', 'G', 'A'];
+
+            container.innerHTML = '';
+
+            sequence.forEach((base, i) => {
+                const pair = document.createElement('div');
+                pair.className = 'base-pair';
+                pair.style.transform = `rotateY(${i * 36}deg) translateZ(50px)`;
+
+                const left = createNucleotide(base);
+                const bond = document.createElement('div');
+                bond.className = 'bond';
+                const right = createNucleotide(basePairs[base]);
+
+                pair.appendChild(left);
+                pair.appendChild(bond);
+                pair.appendChild(right);
+                container.appendChild(pair);
+            });
+        }
+
+        // Helix controls
+        let helixSpeed = 15;
+        const helixContainer = document.getElementById('dnaHelix')?.querySelector('.helix-container');
+
+        document.getElementById('toggleRotation')?.addEventListener('click', function () {
+            const helix = document.querySelector('.helix-container');
+            if (helix) {
+                helix.classList.toggle('paused');
+                this.innerHTML = helix.classList.contains('paused')
+                    ? '<span>▶️</span> Resume Rotation'
+                    : '<span>⏸️</span> Pause Rotation';
+            }
+        });
+
+        document.getElementById('speedUp')?.addEventListener('click', function () {
+            helixSpeed = Math.max(3, helixSpeed - 3);
+            updateHelixSpeed();
+        });
+
+        document.getElementById('slowDown')?.addEventListener('click', function () {
+            helixSpeed = Math.min(30, helixSpeed + 3);
+            updateHelixSpeed();
+        });
+
+        function updateHelixSpeed() {
+            const helix = document.querySelector('.helix-container');
+            if (helix) {
+                helix.style.animationDuration = `${helixSpeed}s`;
+            }
+        }
+
+        // ========== RNA COMPARISON ==========
+        function initRNAComparison() {
+            const dnaStrand = document.getElementById('dnaStrand');
+            const rnaStrand = document.getElementById('rnaStrand');
+            const sequence = ['A', 'T', 'G', 'C', 'A'];
+
+            dnaStrand.innerHTML = '';
+            rnaStrand.innerHTML = '';
+
+            sequence.forEach(base => {
+                dnaStrand.appendChild(createNucleotide(base));
+
+                // RNA uses U instead of T
+                const rnaBase = base === 'T' ? 'A' : (base === 'A' ? 'U' : (basePairs[base] === 'T' ? 'A' : basePairs[base]));
+                const complementary = base === 'A' ? 'U' : (base === 'T' ? 'A' : basePairs[base]);
+                rnaStrand.appendChild(createNucleotide(complementary));
+            });
+        }
+
+        // ========== REPLICATION ==========
+        let replicationState = {
+            step: 0,
+            maxSteps: 10,
+            isPlaying: false,
+            interval: null
+        };
+
+        const templateSequence = ['A', 'T', 'G', 'C', 'A', 'G', 'T', 'C', 'G', 'A'];
+
+        function initReplication() {
+            const template1 = document.getElementById('templateStrand1');
+            const template2 = document.getElementById('templateStrand2');
+            const new1 = document.getElementById('newStrand1');
+            const new2 = document.getElementById('newStrand2');
+
+            template1.innerHTML = '';
+            template2.innerHTML = '';
+            new1.innerHTML = '';
+            new2.innerHTML = '';
+
+            templateSequence.forEach((base, i) => {
+                const n1 = createNucleotide(base, 'mini');
+                n1.classList.add('visible');
+                template1.appendChild(n1);
+
+                const n2 = createNucleotide(basePairs[base], 'mini');
+                n2.classList.add('visible');
+                template2.appendChild(n2);
+
+                const newN1 = createNucleotide(basePairs[base], 'mini');
+                newN1.id = `new1-${i}`;
+                new1.appendChild(newN1);
+
+                const newN2 = createNucleotide(base, 'mini');
+                newN2.id = `new2-${i}`;
+                new2.appendChild(newN2);
+            });
+
+            replicationState.step = 0;
+            updateReplicationUI();
+        }
+
+        function stepReplication() {
+            if (replicationState.step >= replicationState.maxSteps) return;
+
+            const i = replicationState.step;
+            document.getElementById(`new1-${i}`)?.classList.add('visible');
+            document.getElementById(`new2-${i}`)?.classList.add('visible');
+
+            replicationState.step++;
+            updateReplicationUI();
+        }
+
+        function updateReplicationUI() {
+            const progress = (replicationState.step / replicationState.maxSteps) * 100;
+            document.getElementById('replicationProgress').style.width = `${progress}%`;
+
+            const stepIndicator = document.getElementById('replicationStep');
+            const steps = [
+                { title: 'Initialization', desc: 'DNA double helix is ready for replication' },
+                { title: 'Helicase Binding', desc: 'Helicase unwinds the DNA double helix' },
+                { title: 'Strand Separation', desc: 'Hydrogen bonds break between base pairs' },
+                { title: 'Primer Attachment', desc: 'RNA primers attach to template strands' },
+                { title: 'Polymerase Action', desc: 'DNA Polymerase adds nucleotides (A-T, G-C)' },
+                { title: 'Leading Strand', desc: 'Continuous synthesis in 5\' to 3\' direction' },
+                { title: 'Lagging Strand', desc: 'Okazaki fragments form on lagging strand' },
+                { title: 'Fragment Joining', desc: 'DNA Ligase joins Okazaki fragments' },
+                { title: 'Proofreading', desc: 'Polymerase checks for errors' },
+                { title: 'Completion', desc: 'Two identical DNA molecules formed!' }
+            ];
+
+            const stepInfo = steps[Math.min(replicationState.step, steps.length - 1)];
+            stepIndicator.innerHTML = `<h4>Step ${replicationState.step + 1}: ${stepInfo.title}</h4><p>${stepInfo.desc}</p>`;
+        }
+
+        document.getElementById('playReplication')?.addEventListener('click', () => {
+            if (replicationState.isPlaying) return;
+            replicationState.isPlaying = true;
+            replicationState.interval = setInterval(() => {
+                if (replicationState.step >= replicationState.maxSteps) {
+                    clearInterval(replicationState.interval);
+                    replicationState.isPlaying = false;
+                    return;
+                }
+                stepReplication();
+            }, 800);
+        });
+
+        document.getElementById('pauseReplication')?.addEventListener('click', () => {
+            clearInterval(replicationState.interval);
+            replicationState.isPlaying = false;
+        });
+
+        document.getElementById('resetReplication')?.addEventListener('click', () => {
+            clearInterval(replicationState.interval);
+            replicationState.isPlaying = false;
+            initReplication();
+        });
+
+        document.getElementById('stepReplication')?.addEventListener('click', stepReplication);
+
+        // ========== TRANSCRIPTION ==========
+        let transcriptionState = {
+            step: 0,
+            maxSteps: 12,
+            isPlaying: false,
+            interval: null
+        };
+
+        const dnaTemplateSeq = ['T', 'A', 'C', 'G', 'G', 'A', 'T', 'C', 'A', 'G', 'C', 'T'];
+
+        function initTranscription() {
+            const dnaTemplate = document.getElementById('dnaTemplate');
+            const mrnaStrand = document.getElementById('mrnaStrand');
+
+            dnaTemplate.innerHTML = '';
+            mrnaStrand.innerHTML = '';
+
+            dnaTemplateSeq.forEach((base, i) => {
+                const dnaBase = createNucleotide(base, 'mini');
+                dnaBase.classList.add('visible');
+                dnaTemplate.appendChild(dnaBase);
+
+                const rnaBase = createNucleotide(rnaComplement[base], 'mini');
+                rnaBase.id = `mrna-${i}`;
+                mrnaStrand.appendChild(rnaBase);
+            });
+
+            transcriptionState.step = 0;
+            updateTranscriptionUI();
+        }
+
+        function stepTranscription() {
+            if (transcriptionState.step >= transcriptionState.maxSteps) return;
+
+            document.getElementById(`mrna-${transcriptionState.step}`)?.classList.add('visible');
+
+            transcriptionState.step++;
+            updateTranscriptionUI();
+        }
+
+        function updateTranscriptionUI() {
+            const progress = (transcriptionState.step / transcriptionState.maxSteps) * 100;
+            document.getElementById('transcriptionProgress').style.width = `${progress}%`;
+
+            const stepIndicator = document.getElementById('transcriptionStep');
+
+            if (transcriptionState.step === 0) {
+                stepIndicator.innerHTML = '<h4>Ready to Transcribe</h4><p>RNA Polymerase will read DNA and synthesize mRNA</p>';
+            } else if (transcriptionState.step < transcriptionState.maxSteps) {
+                const base = dnaTemplateSeq[transcriptionState.step - 1];
+                const rna = rnaComplement[base];
+                stepIndicator.innerHTML = `<h4>Synthesizing mRNA</h4><p>Reading ${getBaseName(base)} (${base}) → Adding ${getBaseName(rna)} (${rna}) to mRNA</p>`;
+            } else {
+                stepIndicator.innerHTML = '<h4>Transcription Complete!</h4><p>mRNA strand is ready for translation at the ribosome</p>';
+            }
+        }
+
+        document.getElementById('playTranscription')?.addEventListener('click', () => {
+            if (transcriptionState.isPlaying) return;
+            transcriptionState.isPlaying = true;
+            transcriptionState.interval = setInterval(() => {
+                if (transcriptionState.step >= transcriptionState.maxSteps) {
+                    clearInterval(transcriptionState.interval);
+                    transcriptionState.isPlaying = false;
+                    return;
+                }
+                stepTranscription();
+            }, 600);
+        });
+
+        document.getElementById('pauseTranscription')?.addEventListener('click', () => {
+            clearInterval(transcriptionState.interval);
+            transcriptionState.isPlaying = false;
+        });
+
+        document.getElementById('resetTranscription')?.addEventListener('click', () => {
+            clearInterval(transcriptionState.interval);
+            transcriptionState.isPlaying = false;
+            initTranscription();
+        });
+
+        document.getElementById('stepTranscription')?.addEventListener('click', stepTranscription);
+
+        // ========== SUB-TAB NAVIGATION ==========
+        document.querySelectorAll('.sub-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                const parent = this.closest('.viz-container');
+                parent.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+                parent.querySelectorAll('.sub-section').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                const targetId = this.dataset.subtab;
+                document.getElementById(targetId)?.classList.add('active');
+            });
+        });
+
+        // ========== RNA PROCESSING (Unit 4) ==========
+        function initSiRNA() {
+            const strand1 = document.getElementById('sirnaStrand1');
+            const strand2 = document.getElementById('sirnaStrand2');
+            if (!strand1 || !strand2) return;
+
+            const seq = ['A', 'U', 'G', 'C', 'A', 'U', 'G', 'C', 'U', 'A'];
+            strand1.innerHTML = '';
+            strand2.innerHTML = '';
+
+            seq.forEach(base => {
+                const b1 = document.createElement('div');
+                b1.className = 'sirna-base';
+                b1.style.background = baseColors[base];
+                b1.textContent = base;
+                strand1.appendChild(b1);
+
+                const complement = base === 'A' ? 'U' : base === 'U' ? 'A' : base === 'G' ? 'C' : 'G';
+                const b2 = document.createElement('div');
+                b2.className = 'sirna-base';
+                b2.style.background = baseColors[complement];
+                b2.textContent = complement;
+                strand2.appendChild(b2);
+            });
+        }
+
+        document.getElementById('playSplicing')?.addEventListener('click', () => {
+            ['intron1', 'intron2', 'intron3'].forEach((id, i) => {
+                setTimeout(() => {
+                    document.getElementById(id)?.classList.add('removed');
+                }, i * 500);
+            });
+        });
+
+        document.getElementById('resetSplicing')?.addEventListener('click', () => {
+            ['intron1', 'intron2', 'intron3'].forEach(id => {
+                document.getElementById(id)?.classList.remove('removed');
+            });
+        });
+
+        // ========== TRANSLATION (Unit 5) ==========
+        const aminoAcids = ['Met', 'Ala', 'Ser', 'Gly', 'Leu', 'Val', 'Pro', 'STOP'];
+        let translationAnimState = { step: 0, maxSteps: 8, isPlaying: false, interval: null };
+
+        function initTranslationAnim() {
+            const codonContainer = document.getElementById('mrnaCodon');
+            const chainContainer = document.getElementById('polypeptideChain');
+            if (!codonContainer || !chainContainer) return;
+
+            codonContainer.innerHTML = '';
+            chainContainer.innerHTML = '';
+
+            const codons = ['AUG', 'GCU', 'UCU', 'GGU', 'CUU', 'GUU', 'CCU', 'UAA'];
+            codons.forEach((codon, i) => {
+                const div = document.createElement('div');
+                div.style.cssText = 'padding: 0.5rem; background: var(--bg-tertiary); border-radius: 4px; font-size: 0.75rem; color: var(--text-secondary);';
+                div.textContent = codon;
+                div.id = `codon-${i}`;
+                codonContainer.appendChild(div);
+            });
+
+            translationAnimState.step = 0;
+            updateTranslationAnimUI();
+        }
+
+        function stepTranslationAnim() {
+            if (translationAnimState.step >= translationAnimState.maxSteps) return;
+
+            const chainContainer = document.getElementById('polypeptideChain');
+            const aa = aminoAcids[translationAnimState.step];
+
+            if (aa !== 'STOP') {
+                const aaDiv = document.createElement('div');
+                aaDiv.className = 'amino-acid';
+                aaDiv.textContent = aa;
+                chainContainer?.appendChild(aaDiv);
+            }
+
+            const codon = document.getElementById(`codon-${translationAnimState.step}`);
+            if (codon) codon.style.background = 'var(--accent-primary)';
+
+            translationAnimState.step++;
+            updateTranslationAnimUI();
+        }
+
+        function updateTranslationAnimUI() {
+            const progress = (translationAnimState.step / translationAnimState.maxSteps) * 100;
+            const progressBar = document.getElementById('translationProgress');
+            if (progressBar) progressBar.style.width = `${progress}%`;
+
+            const stepIndicator = document.getElementById('translationStep');
+            if (!stepIndicator) return;
+
+            const steps = [
+                { title: 'Initiation', desc: 'Small subunit binds mRNA at AUG. Met-tRNA enters P site.' },
+                { title: 'Elongation', desc: 'Ala-tRNA enters A site. Peptide bond forms.' },
+                { title: 'Elongation', desc: 'Ribosome translocates. Ser-tRNA enters A site.' },
+                { title: 'Elongation', desc: 'Growing chain: Met-Ala-Ser-Gly' },
+                { title: 'Elongation', desc: 'Adding Leu to the growing polypeptide chain.' },
+                { title: 'Elongation', desc: 'Adding Val to the growing polypeptide chain.' },
+                { title: 'Elongation', desc: 'Adding Pro to the growing polypeptide chain.' },
+                { title: 'Termination', desc: 'Stop codon (UAA) reached. Release factors cause dissociation.' }
+            ];
+
+            const stepInfo = steps[Math.min(translationAnimState.step, steps.length - 1)];
+            stepIndicator.innerHTML = `<h4>${stepInfo.title}</h4><p>${stepInfo.desc}</p>`;
+        }
+
+        document.getElementById('playTranslation')?.addEventListener('click', () => {
+            if (translationAnimState.isPlaying) return;
+            translationAnimState.isPlaying = true;
+            translationAnimState.interval = setInterval(() => {
+                if (translationAnimState.step >= translationAnimState.maxSteps) {
+                    clearInterval(translationAnimState.interval);
+                    translationAnimState.isPlaying = false;
+                    return;
+                }
+                stepTranslationAnim();
+            }, 700);
+        });
+
+        document.getElementById('pauseTranslationBtn')?.addEventListener('click', () => {
+            clearInterval(translationAnimState.interval);
+            translationAnimState.isPlaying = false;
+        });
+
+        document.getElementById('resetTranslation')?.addEventListener('click', () => {
+            clearInterval(translationAnimState.interval);
+            translationAnimState.isPlaying = false;
+            initTranslationAnim();
+        });
+
+        // ========== GENE REGULATION (Unit 6) ==========
+        document.getElementById('lacNoLactose')?.addEventListener('click', function () {
+            document.getElementById('lacWithLactose')?.classList.remove('active');
+            this.classList.add('active');
+            const repressor = document.getElementById('lacRepressor');
+            if (repressor) {
+                repressor.style.top = '-30px';
+                repressor.textContent = 'Repressor ⛔';
+            }
+            const stepEl = document.getElementById('lacStep');
+            if (stepEl) stepEl.innerHTML = '<h4>Lac Operon - OFF</h4><p>Repressor binds to operator, blocking RNA polymerase. No transcription.</p>';
+        });
+
+        document.getElementById('lacWithLactose')?.addEventListener('click', function () {
+            document.getElementById('lacNoLactose')?.classList.remove('active');
+            this.classList.add('active');
+            const repressor = document.getElementById('lacRepressor');
+            if (repressor) {
+                repressor.style.top = '-60px';
+                repressor.textContent = 'Repressor + Lactose 🔓';
+            }
+            const stepEl = document.getElementById('lacStep');
+            if (stepEl) stepEl.innerHTML = '<h4>Lac Operon - ON</h4><p>Allolactose binds repressor, changing its shape. Repressor releases from operator. Genes transcribed!</p>';
+        });
+
+        document.getElementById('trpHigh')?.addEventListener('click', function () {
+            document.getElementById('trpLow')?.classList.remove('active');
+            this.classList.add('active');
+            const repressor = document.getElementById('trpRepressor');
+            if (repressor) {
+                repressor.style.top = '-30px';
+                repressor.textContent = 'Repressor + Trp ⛔';
+            }
+            const stepEl = document.getElementById('trpStep');
+            if (stepEl) stepEl.innerHTML = '<h4>Trp Operon - OFF</h4><p>Tryptophan binds to repressor (corepressor). Active repressor blocks transcription.</p>';
+        });
+
+        document.getElementById('trpLow')?.addEventListener('click', function () {
+            document.getElementById('trpHigh')?.classList.remove('active');
+            this.classList.add('active');
+            const repressor = document.getElementById('trpRepressor');
+            if (repressor) {
+                repressor.style.top = '-60px';
+                repressor.textContent = 'Inactive Repressor 🔓';
+            }
+            const stepEl = document.getElementById('trpStep');
+            if (stepEl) stepEl.innerHTML = '<h4>Trp Operon - ON</h4><p>No tryptophan = inactive repressor. Genes are transcribed to synthesize tryptophan.</p>';
+        });
+
+        // ========== INITIALIZE ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            initDNAHelix();
+            initRNAComparison();
+            initReplication();
+            initTranscription();
+            initSiRNA();
+            initTranslationAnim();
+        });
+    </script>
+</body>
+
+</html>
