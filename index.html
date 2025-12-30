@@ -6,41 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNA & RNA Visualization | Molecular Biology Explorer</title>
     <meta name="description"
-        content="Interactive visualization of DNA and RNA structures, replication, transcription, translation, and gene regulation. Explore molecular biology concepts through animated visualizations.">
-
-    <!-- SEO & Social Sharing -->
-    <meta name="keywords"
-        content="DNA, RNA, molecular biology, visualization, replication, transcription, translation, gene regulation, biology education, interactive learning">
-    <meta name="author" content="Abhra">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="DNA & RNA Visualization | Molecular Biology Explorer">
-    <meta property="og:description"
-        content="Interactive visualization of DNA and RNA structures, replication, transcription, translation, and gene regulation.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/Hayagriva0/dna-rna-viz/main/preview.png">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="DNA & RNA Visualization | Molecular Biology Explorer">
-    <meta name="twitter:description"
-        content="Interactive visualization of DNA and RNA structures, replication, transcription, translation, and gene regulation.">
-
-    <!-- Theme Color for Mobile Browsers -->
-    <meta name="theme-color" content="#0a0a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <!-- Favicon -->
+        content="Interactive visualization of DNA and RNA structures, replication, and transcription processes">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
-    <link rel="apple-touch-icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
-
-    <!-- Preconnect for Performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1045,6 +1013,301 @@
             display: block;
         }
 
+        /* ========== SYLLABUS & QUESTIONS ========== */
+        .syllabus-header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .syllabus-header h2 {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .syllabus-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.85rem;
+        }
+
+        .unit-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .unit-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+        }
+
+        .unit-header {
+            background: var(--bg-tertiary);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .unit-header h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .unit-number {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .unit-lectures {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-primary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .unit-content {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-list li {
+            padding: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .topic-list li:last-child {
+            border-bottom: none;
+        }
+
+        .topic-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+        }
+
+        .topic-list li em {
+            color: var(--accent-secondary);
+            font-style: italic;
+        }
+
+        /* Questions Section */
+        .questions-header {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .questions-header h2 {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .questions-header p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .question-unit {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .question-unit-header {
+            background: var(--bg-tertiary);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-unit-header h3 {
+            color: var(--accent-secondary);
+            font-size: 1.1rem;
+        }
+
+        .marks-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .question-list {
+            padding: 1rem 1.5rem;
+        }
+
+        .question-item {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .question-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .question-text:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .q-number {
+            background: var(--accent-primary);
+            color: white;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .q-content {
+            flex: 1;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .q-toggle {
+            color: var(--accent-primary);
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .question-item.open .q-toggle {
+            transform: rotate(180deg);
+        }
+
+        .answer-box {
+            display: none;
+            padding: 1rem 1.25rem;
+            padding-left: 3.5rem;
+            background: rgba(16, 185, 129, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .question-item.open .answer-box {
+            display: block;
+        }
+
+        .answer-box h4 {
+            color: #10b981;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .answer-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .answer-box ul {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            padding-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .answer-box strong {
+            color: var(--text-primary);
+        }
+
+        .learning-outcomes {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 2rem;
+        }
+
+        .learning-outcomes h3 {
+            color: var(--accent-primary);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .learning-outcomes ul {
+            color: var(--text-secondary);
+            padding-left: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
         /* Welcome Modal */
         .modal-overlay {
             position: fixed;
@@ -1183,6 +1446,8 @@
         <button class="tab-btn" data-tab="rna-processing">RNA Processing</button>
         <button class="tab-btn" data-tab="translation">Translation</button>
         <button class="tab-btn" data-tab="gene-regulation">Gene Regulation</button>
+        <button class="tab-btn" data-tab="syllabus">📚 Syllabus</button>
+        <button class="tab-btn" data-tab="questions">📝 Questions</button>
     </nav>
 
     <main>
@@ -1862,6 +2127,560 @@
                 <div class="legend-item">
                     <div class="legend-color" style="background: linear-gradient(135deg, #6366f1, #4f46e5);"></div>
                     <span>Repressor</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SYLLABUS SECTION -->
+        <section id="syllabus" class="section">
+            <div class="syllabus-header">
+                <h2>📚 MJC 9: MOLECULAR BIOLOGY</h2>
+                <p>Course Code: S/MCB/501/MJC-9 | Semester V</p>
+                <div class="syllabus-meta">
+                    <span class="meta-item">📖 50 Lectures</span>
+                    <span class="meta-item">📝 25 Marks Theory</span>
+                    <span class="meta-item">⭐ 4 Credits</span>
+                </div>
+            </div>
+
+            <div class="learning-outcomes">
+                <h3>🎯 Learning Outcomes</h3>
+                <ul>
+                    <li>Gain overall knowledge about replication, transcription, post-transcriptional processing and
+                        translation of prokaryotes and eukaryotes</li>
+                    <li>Learn about regulation of gene expression</li>
+                </ul>
+            </div>
+
+            <!-- Unit 1 -->
+            <div class="unit-card">
+                <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+                    <h3><span class="unit-number">1</span> Structures of DNA and RNA / Genetic Material</h3>
+                    <span class="unit-lectures">6 Lectures</span>
+                </div>
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li><strong>DNA Structure:</strong> Watson and Crick - historical perspective, DNA structure,
+                            salient features of double helix</li>
+                        <li><strong>Types of DNA:</strong> A-DNA, B-DNA, Z-DNA and their characteristics</li>
+                        <li><strong>Denaturation and Renaturation:</strong> Melting temperature, hyperchromicity</li>
+                        <li><strong>Cot Curves:</strong> Reassociation kinetics, complexity analysis</li>
+                        <li><strong>DNA Topology:</strong> Linking number, supercoiling, topoisomerases (Type I and Type
+                            II)</li>
+                        <li><strong>Genome Organization:</strong> Prokaryotes (<em>E.coli</em>), Viruses (DNA
+                            virus-SV40, RNA virus-HIV), Eukaryotes (<em>S.cerevisiae</em>)</li>
+                        <li><strong>RNA Structure:</strong> Types of RNA (mRNA, tRNA, rRNA)</li>
+                        <li><strong>Organelle DNA:</strong> Mitochondria and chloroplast DNA characteristics</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Unit 2 -->
+            <div class="unit-card">
+                <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+                    <h3><span class="unit-number">2</span> Replication of DNA (Prokaryotes and Eukaryotes)</h3>
+                    <span class="unit-lectures">10 Lectures</span>
+                </div>
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li><strong>Bidirectional and Unidirectional Replication:</strong> Origin of replication,
+                            replication forks</li>
+                        <li><strong>Semi-conservative Replication:</strong> Meselson-Stahl experiment proof</li>
+                        <li><strong>Semi-discontinuous Replication:</strong> Leading and lagging strand, Okazaki
+                            fragments</li>
+                        <li><strong>Mechanism of DNA Replication:</strong> Initiation, elongation, termination</li>
+                        <li><strong>Enzymes and Proteins:</strong> DNA polymerases (I, II, III), DNA helicase, primase,
+                            DNA ligase, SSB proteins</li>
+                        <li><strong>Telomerase:</strong> Replication of linear ends, telomere maintenance</li>
+                        <li><strong>Various Models:</strong> Rolling circle replication, Theta (θ) mode of replication
+                        </li>
+                        <li><strong>DNA Repair:</strong> Mismatch repair, Base excision repair, Nucleotide excision
+                            repair</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Unit 3 -->
+            <div class="unit-card">
+                <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+                    <h3><span class="unit-number">3</span> Transcription in Prokaryotes and Eukaryotes</h3>
+                    <span class="unit-lectures">8 Lectures</span>
+                </div>
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li><strong>Transcription Definition:</strong> Process, significance, difference from
+                            replication</li>
+                        <li><strong>Promoter:</strong> Concept and strength of promoter, -10 and -35 boxes
+                            (prokaryotes), TATA box (eukaryotes)</li>
+                        <li><strong>RNA Polymerase and Transcription Unit:</strong> Core enzyme, holoenzyme, sigma
+                            factor</li>
+                        <li><strong>Transcription in Eukaryotes:</strong> RNA Pol I, II, III and their products</li>
+                        <li><strong>General Transcription Factors:</strong> TFIIA, TFIIB, TFIID, TFIIE, TFIIF, TFIIH
+                        </li>
+                        <li><strong>Stages:</strong> Initiation, elongation, and termination mechanisms</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Unit 4 -->
+            <div class="unit-card">
+                <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+                    <h3><span class="unit-number">4</span> Post-Transcriptional Processing</h3>
+                    <span class="unit-lectures">8 Lectures</span>
+                </div>
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li><strong>Split Genes:</strong> Concept of introns and exons, discovery</li>
+                        <li><strong>RNA Splicing:</strong> Mechanism, splice sites (GU-AG rule)</li>
+                        <li><strong>Spliceosome Machinery:</strong> snRNPs (U1, U2, U4, U5, U6), assembly and function
+                        </li>
+                        <li><strong>Alternative Splicing:</strong> Different patterns, significance in protein diversity
+                        </li>
+                        <li><strong>Polyadenylation and Capping:</strong> 5' cap (7-methylguanosine), 3' poly-A tail
+                            addition</li>
+                        <li><strong>Processing of rRNA:</strong> Primary transcript processing, methylation</li>
+                        <li><strong>RNA Interference:</strong> siRNA, its significance in gene silencing (RNAi
+                            mechanism)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Unit 5 -->
+            <div class="unit-card">
+                <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+                    <h3><span class="unit-number">5</span> Translation (Prokaryotes and Eukaryotes)</h3>
+                    <span class="unit-lectures">10 Lectures</span>
+                </div>
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li><strong>Translational Machinery:</strong> Ribosome structure (30S, 50S in prokaryotes; 40S,
+                            60S in eukaryotes)</li>
+                        <li><strong>Charging of tRNA:</strong> Aminoacyl-tRNA synthetases, specificity, proofreading
+                        </li>
+                        <li><strong>Mechanisms of Translation:</strong> Initiation, elongation, termination</li>
+                        <li><strong>Initiation in Prokaryotes:</strong> Shine-Dalgarno sequence, IF1, IF2, IF3</li>
+                        <li><strong>Initiation in Eukaryotes:</strong> Kozak sequence, cap-dependent initiation, eIF
+                            factors</li>
+                        <li><strong>Elongation:</strong> EF-Tu, EF-Ts, EF-G, peptide bond formation, translocation</li>
+                        <li><strong>Termination:</strong> Release factors (RF1, RF2, RF3), stop codon recognition</li>
+                        <li><strong>Inhibitors of Protein Synthesis:</strong> Streptomycin, Tetracycline,
+                            Chloramphenicol, Puromycin, Cycloheximide</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Unit 6 -->
+            <div class="unit-card">
+                <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+                    <h3><span class="unit-number">6</span> Regulation of Gene Expression in Prokaryotes and Eukaryotes
+                    </h3>
+                    <span class="unit-lectures">8 Lectures</span>
+                </div>
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li><strong>Principles of Transcriptional Regulation:</strong> Positive and negative regulation
+                        </li>
+                        <li><strong>Regulation at Initiation:</strong> Regulatory sequences, transcription factors</li>
+                        <li><strong><em>lac</em> Operon:</strong> Inducible system, lac repressor, CAP-cAMP activation,
+                            catabolite repression</li>
+                        <li><strong><em>trp</em> Operon:</strong> Repressible system, attenuation, corepressor mechanism
+                        </li>
+                        <li><strong>Chromatin Structure:</strong> Nucleosomes, euchromatin vs heterochromatin</li>
+                        <li><strong>DNA Methylation:</strong> CpG islands, role in gene silencing, imprinting</li>
+                        <li><strong>Histone Acetylation:</strong> HATs and HDACs, effect on chromatin structure and gene
+                            expression</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODEL QUESTIONS SECTION -->
+        <section id="questions" class="section">
+            <div class="questions-header">
+                <h2>📝 Model Questions - Mock Test</h2>
+                <p>Bankura Sammilani College | Department of Microbiology | Semester V</p>
+                <div class="syllabus-meta">
+                    <span class="meta-item">⏱️ Time: 1 hr 15 mins</span>
+                    <span class="meta-item">📊 Full Marks: 25</span>
+                </div>
+            </div>
+
+            <!-- UNIT I Questions -->
+            <div class="question-unit">
+                <div class="question-unit-header">
+                    <h3>📘 Unit I - Short Answer Questions</h3>
+                    <span class="marks-badge">1 × 5 = 5 Marks</span>
+                </div>
+                <div class="question-list">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Answer <em>any
+                            five</em> of the following:</p>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">a</span>
+                            <span class="q-content">Differentiate between gene & genome.</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Gene:</strong> A gene is a specific segment of DNA that contains the instructions
+                                for making a particular protein or functional RNA molecule. It is the basic unit of
+                                heredity.</p>
+                            <p style="margin-top: 0.5rem;"><strong>Genome:</strong> The genome is the complete set of
+                                genetic material (DNA) in an organism, including all genes and non-coding sequences. It
+                                contains all the information needed to build and maintain that organism.</p>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">b</span>
+                            <span class="q-content">Mention the role of promoter and operator.</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Promoter:</strong> A DNA sequence where RNA polymerase binds to initiate
+                                transcription. It determines which strand is transcribed and the direction of
+                                transcription. Contains -10 (Pribnow box) and -35 consensus sequences in prokaryotes.
+                            </p>
+                            <p style="margin-top: 0.5rem;"><strong>Operator:</strong> A regulatory DNA sequence located
+                                between the promoter and structural genes. It acts as a binding site for repressor
+                                proteins. When repressor binds, it blocks RNA polymerase, preventing transcription.</p>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">c</span>
+                            <span class="q-content">Name the enzyme involved in charging of tRNA.</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Aminoacyl-tRNA synthetase</strong> is the enzyme responsible for charging tRNA.
+                                It catalyzes the attachment of a specific amino acid to its corresponding tRNA molecule
+                                in a two-step reaction:</p>
+                            <ul>
+                                <li>Amino acid + ATP → Aminoacyl-AMP + PPi</li>
+                                <li>Aminoacyl-AMP + tRNA → Aminoacyl-tRNA + AMP</li>
+                            </ul>
+                            <p style="margin-top: 0.5rem;">There are 20 different aminoacyl-tRNA synthetases, one for
+                                each amino acid.</p>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">d</span>
+                            <span class="q-content">Define Open Reading Frame.</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Open Reading Frame (ORF)</strong> is a sequence of DNA or RNA that begins with a
+                                start codon (AUG) and ends with a stop codon (UAA, UAG, or UGA), with no intervening
+                                stop codons. It represents a region that potentially encodes a protein.</p>
+                            <p style="margin-top: 0.5rem;">The reading frame is determined by the position of the first
+                                nucleotide, and DNA can be read in three different frames on each strand (6 total
+                                reading frames).</p>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">e</span>
+                            <span class="q-content">Name one prokaryotic protein synthesis inhibitor.</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Streptomycin</strong> - It binds to the 30S ribosomal subunit and causes
+                                misreading of mRNA, leading to incorporation of incorrect amino acids into the
+                                polypeptide chain.</p>
+                            <p style="margin-top: 0.5rem;">Other examples: <strong>Tetracycline</strong> (blocks
+                                A-site), <strong>Chloramphenicol</strong> (inhibits peptidyl transferase in 50S),
+                                <strong>Erythromycin</strong> (blocks exit tunnel in 50S).</p>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">f</span>
+                            <span class="q-content">What do you mean by genetic code?</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Genetic code</strong> is the set of rules by which information encoded in genetic
+                                material (DNA or RNA) is translated into proteins by living cells. It defines how
+                                sequences of three nucleotides (codons) correspond to specific amino acids.</p>
+                            <p style="margin-top: 0.5rem;"><strong>Properties:</strong> Triplet (3 bases = 1 codon),
+                                Degenerate (multiple codons for same amino acid), Non-overlapping, Universal (same in
+                                most organisms), Unambiguous (each codon specifies only one amino acid).</p>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">g</span>
+                            <span class="q-content">Define consensus sequence with suitable example.</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Consensus sequence</strong> is a sequence of nucleotides that shows the most
+                                common bases found at each position when comparing related sequences from different
+                                genes or organisms. It represents the "average" or most typical sequence.</p>
+                            <p style="margin-top: 0.5rem;"><strong>Example:</strong> The Pribnow box in prokaryotic
+                                promoters has the consensus sequence <strong>TATAAT</strong> (located at -10 position).
+                                The -35 region has consensus sequence <strong>TTGACA</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">h</span>
+                            <span class="q-content">Define alternative splicing.</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Alternative splicing</strong> is a process by which a single pre-mRNA can be
+                                spliced in different ways to produce multiple different mature mRNA variants, which can
+                                then be translated into different protein isoforms.</p>
+                            <p style="margin-top: 0.5rem;">This allows one gene to encode multiple proteins, increasing
+                                proteome diversity without increasing genome size. Types include: exon skipping, intron
+                                retention, alternative 5' or 3' splice sites, and mutually exclusive exons.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UNIT II Questions -->
+            <div class="question-unit">
+                <div class="question-unit-header">
+                    <h3>📗 Unit II - Descriptive Questions</h3>
+                    <span class="marks-badge">5 × 2 = 10 Marks</span>
+                </div>
+                <div class="question-list">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Answer <em>any
+                            two</em> of the following:</p>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">a</span>
+                            <span class="q-content">Write down the salient features of DNA proposed by Watson & Crick.
+                                Distinguish B-DNA from Z-DNA. (3+1+1)</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Salient Features of Watson-Crick DNA Model:</strong></p>
+                            <ul>
+                                <li>DNA is a double helix consisting of two antiparallel polynucleotide strands</li>
+                                <li>The two strands wind around a common axis in a right-handed manner</li>
+                                <li>The sugar-phosphate backbone is on the outside, bases are inside</li>
+                                <li>Bases are paired by hydrogen bonds: A-T (2 H-bonds), G-C (3 H-bonds)</li>
+                                <li>The helix has a diameter of 20Å (2 nm)</li>
+                                <li>One complete turn is 34Å with 10 base pairs per turn (3.4Å per bp)</li>
+                                <li>Has major and minor grooves</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>B-DNA vs Z-DNA:</strong></p>
+                            <ul>
+                                <li><strong>B-DNA:</strong> Right-handed helix, 10 bp/turn, most common form under
+                                    physiological conditions</li>
+                                <li><strong>Z-DNA:</strong> Left-handed helix, 12 bp/turn, zigzag backbone pattern,
+                                    found in alternating purine-pyrimidine sequences</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">b</span>
+                            <span class="q-content">Describe the prokaryotic transcription process with suitable sketch.
+                                Add a short note on mitochondrial DNA. (3+2)</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Prokaryotic Transcription:</strong></p>
+                            <ul>
+                                <li><strong>Initiation:</strong> RNA polymerase holoenzyme (core + σ factor) binds to
+                                    promoter at -10 (TATAAT) and -35 (TTGACA) regions. DNA unwinds to form open complex.
+                                </li>
+                                <li><strong>Elongation:</strong> σ factor releases. Core enzyme synthesizes RNA 5'→3'
+                                    using template strand 3'→5'. Transcription bubble moves along DNA.</li>
+                                <li><strong>Termination:</strong> Two mechanisms - Rho-independent (intrinsic) uses
+                                    hairpin loop + poly-U stretch; Rho-dependent uses Rho protein helicase.</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>Mitochondrial DNA (mtDNA):</strong></p>
+                            <ul>
+                                <li>Circular, double-stranded DNA (~16.5 kb in humans)</li>
+                                <li>Encodes 13 proteins, 22 tRNAs, and 2 rRNAs</li>
+                                <li>Maternally inherited (no recombination)</li>
+                                <li>Has its own genetic code (slightly different from nuclear code)</li>
+                                <li>High mutation rate due to lack of histone protection</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">c</span>
+                            <span class="q-content">Briefly discuss rolling circle method of replication. What is the
+                                role of DNA methylation in replication? (4+1)</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Rolling Circle Replication:</strong></p>
+                            <ul>
+                                <li>Used by some viruses (φX174), plasmids, and during bacterial conjugation</li>
+                                <li>A nick is made in one strand of circular dsDNA</li>
+                                <li>The 3'-OH end serves as primer; DNA polymerase extends it</li>
+                                <li>As new strand is synthesized, the old strand is displaced</li>
+                                <li>The displaced strand can be used as template for complementary synthesis</li>
+                                <li>Can generate multiple copies (concatamers) from one circular template</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>Role of DNA Methylation in Replication:</strong></p>
+                            <ul>
+                                <li>Helps distinguish between parental (methylated) and newly synthesized (unmethylated)
+                                    strands</li>
+                                <li>Important in mismatch repair - repair machinery removes bases from unmethylated
+                                    strand</li>
+                                <li>Dam methylase adds methyl groups to adenine in GATC sequences</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">d</span>
+                            <span class="q-content">Write short note on any two: i. Base Excision Repair ii.
+                                Topoisomerase iii. Cot curve (2.5×2=5)</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>i. Base Excision Repair (BER):</strong></p>
+                            <ul>
+                                <li>Repairs damaged or modified single bases (oxidation, alkylation, deamination)</li>
+                                <li>DNA glycosylase recognizes and removes damaged base, creating AP site</li>
+                                <li>AP endonuclease cleaves phosphodiester backbone</li>
+                                <li>DNA polymerase fills gap; ligase seals nick</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>ii. Topoisomerase:</strong></p>
+                            <ul>
+                                <li>Enzymes that control DNA topology by changing supercoiling</li>
+                                <li><strong>Type I:</strong> Cuts one strand, relaxes supercoils, religates
+                                    (ATP-independent)</li>
+                                <li><strong>Type II (DNA gyrase):</strong> Cuts both strands, passes another segment
+                                    through, introduces negative supercoils (ATP-dependent)</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>iii. Cot Curve:</strong></p>
+                            <ul>
+                                <li>Graph showing reassociation kinetics of denatured DNA</li>
+                                <li>Cot = initial concentration × time</li>
+                                <li>Reveals genome complexity: repetitive DNA reassociates faster than unique sequences
+                                </li>
+                                <li>Cot½ value indicates complexity - higher Cot½ means more complex genome</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UNIT III Questions -->
+            <div class="question-unit">
+                <div class="question-unit-header">
+                    <h3>📙 Unit III - Long Answer Questions</h3>
+                    <span class="marks-badge">10 × 1 = 10 Marks</span>
+                </div>
+                <div class="question-list">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Answer <em>any
+                            one</em> of the following:</p>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">a</span>
+                            <span class="q-content">Write in detail about the initiation of translation process in
+                                prokaryotes with suitable diagrams. Write a short note on RNA splicing. (6+4)</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Initiation of Translation in Prokaryotes:</strong></p>
+                            <ul>
+                                <li><strong>Step 1:</strong> 30S subunit binds IF1 and IF3 (prevents premature 50S
+                                    joining)</li>
+                                <li><strong>Step 2:</strong> mRNA binds via Shine-Dalgarno sequence (AGGAGG)
+                                    complementary to 16S rRNA</li>
+                                <li><strong>Step 3:</strong> Start codon AUG positioned at P-site</li>
+                                <li><strong>Step 4:</strong> IF2-GTP brings fMet-tRNAfMet to P-site</li>
+                                <li><strong>Step 5:</strong> 50S subunit joins, GTP hydrolysis, IF1, IF2, IF3 release
+                                </li>
+                                <li><strong>Result:</strong> 70S initiation complex with fMet-tRNA in P-site, A-site
+                                    ready</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>RNA Splicing:</strong></p>
+                            <ul>
+                                <li>Removal of introns from pre-mRNA to form mature mRNA</li>
+                                <li>Splice sites: 5' (GU) donor and 3' (AG) acceptor sites</li>
+                                <li>Branch point adenine forms lariat structure</li>
+                                <li><strong>Mechanism:</strong> Two transesterification reactions catalyzed by
+                                    spliceosome</li>
+                                <li><strong>Spliceosome:</strong> Complex of snRNPs (U1, U2, U4, U5, U6) and proteins
+                                </li>
+                                <li>U1 binds 5' splice site, U2 binds branch point, catalysis occurs via U2-U6 pairing
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="q-number">b</span>
+                            <span class="q-content">Why is DNA replication called semi-conservative? Mention different
+                                enzymes and proteins involved in DNA replication. What is the role of siRNA?
+                                (2+7+1)</span>
+                            <span class="q-toggle">▼</span>
+                        </div>
+                        <div class="answer-box">
+                            <h4>✅ Answer:</h4>
+                            <p><strong>Semi-conservative Replication:</strong></p>
+                            <ul>
+                                <li>Each daughter DNA molecule contains one parental strand and one newly synthesized
+                                    strand</li>
+                                <li>Proved by Meselson-Stahl experiment (1958) using ¹⁵N and ¹⁴N density labeling</li>
+                                <li>After one generation: hybrid (intermediate density); After two: 50% hybrid + 50%
+                                    light</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>Enzymes and Proteins in DNA Replication:</strong>
+                            </p>
+                            <ul>
+                                <li><strong>Helicase (DnaB):</strong> Unwinds double helix at replication fork</li>
+                                <li><strong>SSB proteins:</strong> Stabilize single-stranded DNA, prevent reannealing
+                                </li>
+                                <li><strong>Topoisomerase/Gyrase:</strong> Relieves torsional strain ahead of fork</li>
+                                <li><strong>Primase (DnaG):</strong> Synthesizes RNA primers</li>
+                                <li><strong>DNA Polymerase III:</strong> Main replicative enzyme, 5'→3' synthesis,
+                                    proofreading</li>
+                                <li><strong>DNA Polymerase I:</strong> Removes primers, fills gaps, exonuclease activity
+                                </li>
+                                <li><strong>DNA Ligase:</strong> Joins Okazaki fragments by forming phosphodiester bonds
+                                </li>
+                                <li><strong>Sliding clamp (β-clamp):</strong> Increases processivity of Pol III</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>Role of siRNA:</strong></p>
+                            <ul>
+                                <li>Small interfering RNA (~21-23 nt) involved in RNA interference (RNAi)</li>
+                                <li>Guides RISC complex to complementary mRNA for degradation</li>
+                                <li>Used for gene silencing/knockdown in research and potential therapeutics</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
